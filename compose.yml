@@ -1,0 +1,40 @@
+services:
+  restaurant:
+    container_name: restaurant
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - DB_HOST=restaurant_db
+      - DB_PORT=5432
+      - REDIS_URL=redis://restaurant_redis:6379/0
+    networks:
+      - AuroraNetwork
+    depends_on:
+      - restaurant_db
+      - restaurant_redis
+  restaurant_db:
+    container_name: restaurant_db
+    image: postgres:15.3-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - AuroraNetwork
+    ports:
+      - "5434:5432"
+  restaurant_redis:
+    container_name: restaurant_redis
+    image: redis:6
+    ports:
+      - "6379:6379"
+    networks:
+      - AuroraNetwork
+
+volumes:
+  db_data:
+
+networks:
+  AuroraNetwork:
+    external: true
