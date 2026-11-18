@@ -157,7 +157,7 @@ async def get_halls(restaurant_id: int, redis=Depends(redis.get_client), db=Depe
         redis.set(cache_key, json.dumps(halls))
         return {"halls": halls}
 
-@app.get("/restaurants/{restaurant_id}/halls/with-tables")
+@app.get("/restaurants/{restaurant_id}/halls/with_tables")
 async def get_halls_with_tables(restaurant_id: int, redis=Depends(redis.get_client), db=Depends(database.get_session)):
     cache_key = f"restaurant_{restaurant_id}_halls_with_tables"
     if redis.exists(cache_key):
